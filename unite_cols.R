@@ -13,6 +13,13 @@ unite_cols <- function(
     name_end   = -1,
     remove = TRUE
 ){
+  ## Vérification que la colonne n'existe pas déjà :
+  if(
+    col %in% colnames(data)
+  ){
+    stop(paste0("La colonne ", col, " existe déjà!"))
+  }
+  
   
   ## création d'un identifiant unique des éléments de data :
   data_copy <- data %>%
