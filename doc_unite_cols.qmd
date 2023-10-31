@@ -19,7 +19,7 @@ execute:
   eval: false
 ---
 
-Source : [unite_cols.R]()
+Source : [unite_cols.R](https://github.com/vnunzi/ARTM-R-fonctions/blob/main/unite_cols.R)
 
 Fonction librement inspirée de [unite](https://tidyr.tidyverse.org/reference/unite.html). La différence réside dans le fait que `unite` concatène les **valeurs** des colonnes sélectionnées, tandis que `unite_cols` concatène les **noms** des colonnes sélectionnées, pour les lignes respectant une condition.
 
