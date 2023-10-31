@@ -1,0 +1,25 @@
+/* colors */
+h1, h2, h3, h4, h5, h6 {
+  color: #003C60;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  border-bottom-color: #00A0A5;
+  border-bottom-width: 2.25pt;
+}
+
+.header-section-number, .toc-active {
+  color: #003C60;
+}
+
+
+/* font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: Arial;
+  font-weight: bold;
+}
+
+body {
+ font-family: Arial;
+}
+

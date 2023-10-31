@@ -1,0 +1,138 @@
+---
+title: "unite_cols"
+subtitle: "Unir plusieurs colonnes en concaténant leurs noms selon une condition"
+lang: fr
+author: "Victor Nunzi"
+date: '2023-10-31'
+format: 
+  html:
+    toc: true
+    toc-location: 'left'
+    toc-float: true
+    toc-collapsed: true
+    toc-depth: 3
+    number-sections: true
+    embed-resources: true
+    # code-tools: true
+    css: theme_ARTM.css
+execute: 
+  eval: false
+---
+
+Source : [unite_cols.R]()
+
+Fonction librement inspirée de [unite](https://tidyr.tidyverse.org/reference/unite.html). La différence réside dans le fait que `unite` concatène les **valeurs** des colonnes sélectionnées, tandis que `unite_cols` concatène les **noms** des colonnes sélectionnées, pour les lignes respectant une condition.
+
+Cette fonction nécessite le chargement des _package_ `dplyr`, `tidyr` et `stringr`.
+
+## Usage {-}
+
+```{r usage}
+unite_cols(data,
+               col,
+               vars,
+               sep = "_",
+               condition = TRUE,
+               name_start =  1,
+               name_end   = -1,
+               remove = TRUE)
+```
+
+## Arguments {-}
+
+data
+: Un _data frame_.
+
+col
+: Le nom d'une colonne, comme chaîne de caractères. Il s'agit du nom de la colonne qui sera créée, contenant la concaténation.
+
+vars
+: <[tidy-select](https://tidyr.tidyverse.org/reference/tidyr_tidy_select.html)> Colonnes à unir.
+
+sep
+: Séparateur à utiliser entre les suffixes.
+
+condition
+: Valeur à rechercher.
+
+name_start, name_end
+: Positions du premier et dernier caractères des noms de colonnes d'entrée.
+
+remove
+: Si `TRUE`, retire les colonnes d'entrée du _data frame_ de sortie.
+
+## Exemples {-}
+
+```{r exemples}
+df <- expand_grid(x = c(1, 0), y = c(1, 0), z = c(1, 0))
+df
+#> # A tibble: 8 × 3
+#>       x     y     z
+#>   <dbl> <dbl> <dbl>
+#> 1     1     1     1
+#> 2     1     1     0
+#> 3     1     0     1
+#> 4     1     0     0
+#> 5     0     1     1
+#> 6     0     1     0
+#> 7     0     0     1
+#> 8     0     0     0
+
+
+df %>% unite_cols("list", x:z, remove = FALSE)
+#> # A tibble: 8 × 4
+#>       x     y     z list 
+#>   <dbl> <dbl> <dbl> <chr>
+#> 1     1     1     1 x_y_z
+#> 2     1     1     0 x_y  
+#> 3     1     0     1 x_z  
+#> 4     1     0     0 x    
+#> 5     0     1     1 y_z  
+#> 6     0     1     0 y    
+#> 7     0     0     1 z    
+#> 8     0     0     0 NA
+
+# Pour retirer les colonnes d'entrée :
+df %>% unite_cols("list", x:z, remove = TRUE)
+#> # A tibble: 8 × 1
+#>   list 
+#>   <chr>
+#> 1 x_y_z
+#> 2 x_y  
+#> 3 x_z  
+#> 4 x    
+#> 5 y_z  
+#> 6 y    
+#> 7 z    
+#> 8 NA
+
+# Pour sélectionner une substring des noms des colonnes, ou changerle 
+#   séparateur :
+df <- expand_grid(col_x = c(1, 0), col_y = c(1, 0), col_z = c(1, 0))
+df
+#> # A tibble: 8 × 3
+#>   col_x col_y col_z
+#>   <dbl> <dbl> <dbl>
+#> 1     1     1     1
+#> 2     1     1     0
+#> 3     1     0     1
+#> 4     1     0     0
+#> 5     0     1     1
+#> 6     0     1     0
+#> 7     0     0     1
+#> 8     0     0     0
+
+df %>% unite_cols("list", col_x:col_z, sep = "-", name_start = -1, remove = FALSE)
+#> # A tibble: 8 × 4
+#>   col_x col_y col_z list 
+#>   <dbl> <dbl> <dbl> <chr>
+#> 1     1     1     1 x-y-z
+#> 2     1     1     0 x-y  
+#> 3     1     0     1 x-z  
+#> 4     1     0     0 x    
+#> 5     0     1     1 y-z  
+#> 6     0     1     0 y    
+#> 7     0     0     1 z    
+#> 8     0     0     0 NA  
+```
+
